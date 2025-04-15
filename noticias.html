@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <base href="/" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notícias - Home Office Sustentável</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"> <!-- Para os ícones -->
+    <style>
+        /* Reset de estilos e configurações gerais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f4f9f8;
+            color: #333;
+            line-height: 1.6;
+        }
+
+      /* Menu Lateral */
+      .menu {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: #388e3c;
+            transition: left 0.3s ease;
+            box-shadow: 3px 0 15px rgba(0, 0, 0, 0.1);
+            padding-top: 20px;
+            z-index: 1;
+        }
+
+        .menu.active {
+            left: 0;
+        }
+
+        .menu .toggle {
+            position: absolute;
+            top: 25px;
+            right: -80px;
+            background-color: #fff;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 3px solid #388e3c;
+        }
+
+        .menu .toggle div {
+            width: 20px;
+            height: 2px;
+            background-color: #388e3c;
+            margin: 4px 0;
+            transition: transform 0.3s ease;
+        }
+
+        .menu.active .toggle div:first-child {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu.active .toggle div:last-child {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .menu-item {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: background-color 0.3s;
+        }
+
+        .menu-item:hover {
+            background-color: #2c6b2f;
+        }
+
+        .menu-item i {
+            margin-right: 15px;
+        }
+
+
+        /* Layout */
+        .content-wrapper {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            margin-left: 0;
+            transition: margin-left 0.3s ease;
+            padding-top: 80px;
+        }
+
+        .content-wrapper.active {
+            margin-left: 250px;
+        }
+
+
+
+        /* Estilo do cabeçalho */
+        .header {
+            background: linear-gradient(135deg, #4caf50, #2c6b2f);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        /* Estilo da navegação */
+        .nav {
+            background-color: #2c6b2f;
+            padding: 15px 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            transition: background-color 0.3s, transform 0.3s;
+            font-weight: 600;
+        }
+
+        .nav a:hover {
+            background-color: #3b8c5c;
+            transform: translateY(-2px);
+        }
+
+        .menu-icon div {
+            height: 4px;
+            width: 100%;
+            background-color: white;
+            border-radius: 2px;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                text-align: center;
+                background-color: #2c6b2f;
+            }
+
+            .nav.open {
+                display: flex;
+            }
+
+            .nav a {
+                padding: 12px;
+                font-size: 1.2rem;
+                width: 100%;
+                text-align: center;
+                border-radius: 10px;
+            }
+
+            .menu-icon {
+                display: flex;
+            }
+        }
+
+        /* Estilo da seção de notícias */
+        .news-section {
+            background-color: white;
+            padding: 40px 20px;
+            margin: 20px auto;
+            max-width: 1200px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .news-section h2 {
+            font-size: 2rem;
+            color: #2c6b2f;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .news-item {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .news-item:last-child {
+            border-bottom: none;
+        }
+
+        .news-item h3 {
+            color: #4caf50;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .news-item p {
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .news-item a {
+            color: white;
+            background-color: #4caf50;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.3s;
+            display: inline-block;
+        }
+
+        .news-item a:hover {
+            background-color: #3b8c5c;
+            transform: translateY(-3px);
+        }
+
+        /* Estilo do rodapé */
+        footer {
+            background-color: #2c6b2f;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Notícias sobre Home Office Sustentável 💼🌿</h1>
+    </header>
+    <!-- Menu Lateral -->
+    <div class="menu">
+        <div class="toggle">
+            <div></div>
+            <div></div>
+        </div>
+        <a href="/" class="menu-item">
+            <i class="fas fa-home"></i> Início
+        </a>
+        <a href="/projetos.html" class="menu-item">
+            <i class="fas fa-cogs"></i> Projetos
+        </a>
+        <a href="/noticias.html" class="menu-item">
+            <i class="fas fa-bullhorn"></i> Notícias
+        </a>
+        <a href="/dicas.html" class="menu-item">
+            <i class="fas fa-info-circle"></i> Dicas
+        </a>
+        <a href="/contato.html" class="menu-item">
+            <i class="fas fa-envelope"></i> Contato
+        </a>
+        <a href="/login.html" class="menu-item">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>        
+    </div>
+
+    <section class="news-section">
+        <h2>Últimas Notícias sobre Sustentabilidade e Home Office</h2>
+
+        <!-- Notícia 1 -->
+        <div class="news-item">
+            <h3>🏡 Empresas adotam home office como modelo permanente após Covid-19</h3>
+            <p>Em Nova York, escritórios estão sendo convertidos em apartamentos; confira série de reportagens da CNN Brasil "Como a Covid mudou o mundo".</p>
+            <a href="https://www.cnnbrasil.com.br/internacional/empresas-passaram-a-adotar-home-office-como-modelo-permanente-apos-covid-19/" target="_blank">Leia mais na CNN Brasil</a>
+        </div>
+
+        <!-- Notícia 2 -->
+        <div class="news-item">
+            <h3>💡 Salário em dólar para home office: veja empresas que estão contratando brasileiros</h3>
+            <p>A maioria das vagas é para as áreas de tecnologia e atendimento ao cliente, com salários que vão de R$ 23 por hora a R$ 34 mil por mês.</p>
+            <a href="https://www.estadao.com.br/tudo-sobre/home-office/" target="_blank">Veja mais no Estadão</a>
+        </div>
+
+        <!-- Notícia 3 -->
+        <div class="news-item">
+            <h3>🌍 Dell convoca funcionários a trabalharem três dias por semana no escritório</h3>
+            <p>Seus funcionários retornarão ao escritório três dias por semana, argumentando que a interação humana é mais eficiente do que trocas de e-mails.</p>
+            <a href="https://gauchazh.clicrbs.com.br/ultimas-noticias/tag/home-office/" target="_blank">Leia mais no GZH</a>
+        </div>
+
+        <!-- Notícia 4 -->
+        <div class="news-item">
+            <h3>🌱 Mais dias no escritório não aumentam produtividade, diz economista</h3>
+            <p>Aumentar os dias no escritório de três para cinco não tem impacto significativo na produtividade, mas reduz a satisfação dos funcionários.</p>
+            <a href="https://www.barrons.com/articles/work-from-home-office-return-economy-productivity-726403ac" target="_blank">Leia mais na Barron's</a>
+        </div>
+
+        <!-- Notícia 5 -->
+        <div class="news-item">
+            <h3>🏢 Conheça o prédio mais sustentável do mundo no Egito</h3>
+            <p>Forbes International Tower promete alcançar meta de emissão zero de carbono e aposta em energia solar e hidrogênio verde.</p>
+            <a href="https://g1.globo.com/meio-ambiente/noticia/2023/12/06/egito-tera-o-predio-mais-sustentavel-do-mundo.ghtml" target="_blank">Leia mais no G1</a>
+        </div>
+
+        <!-- Notícia 6 -->
+        <div class="news-item">
+            <h3>🌿 Empresas adotam práticas ecológicas para trabalho remoto</h3>
+            <p>Companhias implementam programas de reciclagem e eficiência energética para funcionários que trabalham de casa.</p>
+            <a href="https://g1.globo.com/economia/noticia/2023/11/25/empresas-adotam-praticas-ecologicas-home-office.ghtml" target="_blank">Leia mais no G1</a>
+        </div>
+
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Home Office Sustentável. Todos os direitos reservados.</p>
+        <p><a href="/politica-de-privacidade.html" style="color: #c8e6c9; text-decoration: none;">Política de Privacidade</a> | <a href="/termos-de-uso.html" style="color: #c8e6c9; text-decoration: none;">Termos de Uso</a></p>
+    </footer>
+
+    <script>
+
+
+        // Função de alternância do menu
+        const menu = document.querySelector('.menu');
+        const toggle = document.querySelector('.menu .toggle');
+        const contentWrapper = document.querySelector('.content-wrapper');
+
+        toggle.addEventListener('click', () => {
+            menu.classList.toggle('active');
+            contentWrapper.classList.toggle('active');
+        });
+
+
+        function toggleMenu() {
+            const nav = document.querySelector('.nav');
+            nav.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
