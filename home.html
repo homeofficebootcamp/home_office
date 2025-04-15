@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CTRL-S</title>
+
+    <!-- Fonte do Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Meta extra -->
+    <meta name="author" content="Projeto Home Office Sustentável">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"> <!-- Para os ícones -->
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f4f9f4;
+            color: #333;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Estilo da navegação */
+        .nav {
+            background-color: #2c6b2f;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .nav a:hover {
+            background-color: #3b8c5c;
+        }
+
+        /* Menu Lateral */
+        .menu {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: #388e3c;
+            transition: left 0.3s ease;
+            box-shadow: 3px 0 15px rgba(0, 0, 0, 0.1);
+            padding-top: 20px;
+            z-index: 1;
+        }
+
+        .menu.active {
+            left: 0;
+        }
+
+        .menu .toggle {
+            position: absolute;
+            top: 25px;
+            right: -80px;
+            background-color: #fff;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 3px solid #388e3c;
+        }
+
+        .menu .toggle div {
+            width: 20px;
+            height: 2px;
+            background-color: #388e3c;
+            margin: 4px 0;
+            transition: transform 0.3s ease;
+        }
+
+        .menu.active .toggle div:first-child {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu.active .toggle div:last-child {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .menu-item {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: background-color 0.3s;
+        }
+
+        .menu-item:hover {
+            background-color: #2c6b2f;
+        }
+
+        .menu-item i {
+            margin-right: 15px;
+        }
+
+        /* Layout */
+        .content-wrapper {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            margin-left: 0;
+            transition: margin-left 0.3s ease;
+        }
+
+        .content-wrapper.active {
+            margin-left: 250px;
+        }
+
+        /* Header */
+        header {
+            background-color: #388e3c;
+            padding: 40px;
+            color: white;
+            text-align: center;
+        }
+
+        /* Seção de Contato */
+        .content {
+            max-width: 800px;
+            margin: 60px auto;
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .content h2 {
+            font-size: 2rem;
+            color: #388e3c;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            font-size: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #f8f8f8;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: #4caf50;
+            outline: none;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .form-group button {
+            background-color: #4caf50;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s;
+        }
+
+        .form-group button:hover {
+            background-color: #388e3c;
+        }
+
+        /* Redes Sociais */
+        .social-media {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .social-media a {
+            display: inline-block;
+            margin: 0 10px;
+            text-decoration: none;
+            color: white;
+            background-color: #4caf50;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s;
+        }
+
+        .social-media a:hover {
+            background-color: #388e3c;
+            transform: translateY(-3px);
+        }
+
+        /* Mapa */
+        .map-container {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            max-width: 800px;
+            height: 300px;
+            border-radius: 10px;
+            border: 2px solid #4caf50;
+        }
+
+        /* Rodapé */
+        footer {
+            background-color: #2c6b2f;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 60px;
+            font-size: 0.9rem;
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .menu {
+                width: 200px;
+            }
+
+            .content-wrapper {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menu Lateral -->
+    <div class="menu">
+        <div class="toggle">
+            <div></div>
+            <div></div>
+        </div>
+        <a href="/" class="menu-item">
+            <i class="fas fa-home"></i> Início
+        </a>
+        <a href="/projetos.html" class="menu-item">
+            <i class="fas fa-cogs"></i> Projetos
+        </a>
+        <a href="/noticias.html" class="menu-item">
+            <i class="fas fa-bullhorn"></i> Notícias
+        </a>
+        <a href="/dicas.html" class="menu-item">
+            <i class="fas fa-info-circle"></i> Dicas
+        </a>
+        <a href="/contato.html" class="menu-item">
+            <i class="fas fa-envelope"></i> Contato
+        </a>
+        <a href="/index.html" class="menu-item">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>        
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div class="content-wrapper">
+        <header>
+            <h1>Home Office Sustentável 🌱💼</h1>
+        </header>
+
+        <section class="content">
+            <h2>Bem-vindo ao Home Office Sustentável</h2>
+            <p style="font-size: 1.2rem; line-height: 1.8; text-align: center; margin-bottom: 30px;">
+                O <strong>Home Office Sustentável</strong> é um projeto dedicado a transformar seu ambiente de trabalho em casa em um espaço mais saudável, eficiente e ecologicamente correto.
+                Acreditamos que pequenas mudanças no dia a dia podem gerar grandes impactos no planeta e na sua qualidade de vida. 🌎✨
+            </p>
+        
+            <h2 style="margin-top: 40px;">Por que aderir ao Home Office Sustentável?</h2>
+            <ul style="list-style: none; padding-left: 0; font-size: 1.1rem; margin-bottom: 40px;">
+                <li>🌿 Redução do impacto ambiental com escolhas conscientes</li>
+                <li>💡 Economia de energia com equipamentos eficientes</li>
+                <li>🧘‍♀️ Mais bem-estar com ergonomia e organização</li>
+                <li>📈 Aumento da produtividade com um ambiente equilibrado</li>
+            </ul>
+        
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin: 40px 0;">
+                <img src="https://tse3.mm.bing.net/th?id=OIP.5k3l8qfzXyHF0Hq2_lvjlQHaHa&w=474&h=474&c=7" 
+                     alt="Home office com plantas" 
+                     style="width: 300px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                
+                <img src="https://tse3.mm.bing.net/th?id=OIP.9peKcsReEFBjfsG6rYtUWgHaJP&w=474&h=474&c=7" 
+                     alt="Home office moderno no Brasil" 
+                     style="width: 300px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+            
+                <img src="https://cdn.trendir.com/wp-content/uploads/2016/11/moveable-workspace-minimalist-home-office-900x1200.jpeg" 
+                     alt="Vista panorâmica de um escritório sustentável" 
+                     style="width: 300px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+            </div>
+            
+            <h2>Como aplicar no seu dia a dia?</h2>
+            <ul style="line-height: 2; font-size: 1.1rem; margin-bottom: 40px;">
+                <li>✅ Substitua lâmpadas comuns por LED</li>
+                <li>✅ Reaproveite móveis ou compre de segunda mão</li>
+                <li>✅ Prefira luz natural e evite ar-condicionado sempre que possível</li>
+                <li>✅ Use equipamentos com selo de eficiência energética</li>
+                <li>✅ Plante ervas, suculentas ou pequenas plantas para o ambiente respirar melhor</li>
+            </ul>
+        
+            <blockquote style="background-color: #e8f5e9; padding: 20px; border-left: 5px solid #4caf50; font-style: italic; margin-bottom: 40px;">
+                “Sustentabilidade não é uma tendência. É uma necessidade.”
+            </blockquote>
+        
+            <div class="social-media">
+                <h2>Nos acompanhe nas redes sociais</h2>
+                <a href="https://www.instagram.com/homeoffice_sus?igsh=c2JjeHppdmI1NHh5" target="_blank">Instagram</a>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2025 Home Office Sustentável. Todos os direitos reservados.</p>
+            <p><a href="/politica-de-privacidade.html" style="color: #c8e6c9; text-decoration: none;">Política de Privacidade</a> | <a href="/termos.html" style="color: #c8e6c9; text-decoration: none;">Termos de Uso</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // Função de alternância do menu
+        const menu = document.querySelector('.menu');
+        const toggle = document.querySelector('.menu .toggle');
+        const contentWrapper = document.querySelector('.content-wrapper');
+
+        toggle.addEventListener('click', () => {
+            menu.classList.toggle('active');
+            contentWrapper.classList.toggle('active');
+        });
+    </script>
+
+</body>
+</html>
